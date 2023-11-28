@@ -1,0 +1,3 @@
+dependencies:
+  network_manager:
+    path: ../../network_manager
