@@ -13,7 +13,7 @@
 #include "esp_err.h"
 #if !CONFIG_IDF_TARGET_LINUX
 #include "esp_netif.h"
-#if CONFIG_EXAMPLE_CONNECT_ETHERNET
+#if CONFIG_CONNECT_ETHERNET
 #include "esp_eth.h"
 #endif
 #endif // !CONFIG_IDF_TARGET_LINUX
@@ -23,21 +23,21 @@ extern "C" {
 #endif
 
 #if !CONFIG_IDF_TARGET_LINUX
-#if CONFIG_EXAMPLE_CONNECT_WIFI
-#define EXAMPLE_NETIF_DESC_STA "example_netif_sta"
+#if CONFIG_CONNECT_WIFI
+#define NETIF_DESC_STA "netif_sta"
 #endif
 
-#if CONFIG_EXAMPLE_CONNECT_ETHERNET
-#define EXAMPLE_NETIF_DESC_ETH "example_netif_eth"
+#if CONFIG_CONNECT_ETHERNET
+#define NETIF_DESC_ETH "netif_eth"
 #endif
 
 /* Example default interface, prefer the ethernet one if running in example-test (CI) configuration */
-#if CONFIG_EXAMPLE_CONNECT_ETHERNET
-#define EXAMPLE_INTERFACE get_example_netif_from_desc(EXAMPLE_NETIF_DESC_ETH)
-#define get_example_netif() get_example_netif_from_desc(EXAMPLE_NETIF_DESC_ETH)
-#elif CONFIG_EXAMPLE_CONNECT_WIFI
-#define EXAMPLE_INTERFACE get_example_netif_from_desc(EXAMPLE_NETIF_DESC_STA)
-#define get_example_netif() get_example_netif_from_desc(EXAMPLE_NETIF_DESC_STA)
+#if CONFIG_CONNECT_ETHERNET
+#define INTERFACE get_netif_from_desc(NETIF_DESC_ETH)
+#define get_netif() get_netif_from_desc(NETIF_DESC_ETH)
+#elif CONFIG_CONNECT_WIFI
+#define INTERFACE get_netif_from_desc(NETIF_DESC_STA)
+#define get_netif() get_netif_from_desc(NETIF_DESC_STA)
 #endif
 
 /**
@@ -55,12 +55,12 @@ extern "C" {
  *
  * @return ESP_OK on successful connection
  */
-esp_err_t example_connect(void);
+esp_err_t network_connect(void);
 
 /**
- * Counterpart to example_connect, de-initializes Wi-Fi or Ethernet
+ * Counterpart to connect, de-initializes Wi-Fi or Ethernet
  */
-esp_err_t example_disconnect(void);
+esp_err_t network_disconnect(void);
 
 /**
  * @brief Configure stdin and stdout to use blocking I/O
@@ -68,39 +68,39 @@ esp_err_t example_disconnect(void);
  * This helper function is used in ASIO examples. It wraps installing the
  * UART driver and configuring VFS layer to use UART driver for console I/O.
  */
-esp_err_t example_configure_stdin_stdout(void);
+esp_err_t configure_stdin_stdout(void);
 
 /**
- * @brief Returns esp-netif pointer created by example_connect() described by
+ * @brief Returns esp-netif pointer created by connect() described by
  * the supplied desc field
  *
  * @param desc Textual interface of created network interface, for example "sta"
  * indicate default WiFi station, "eth" default Ethernet interface.
  *
  */
-esp_netif_t *get_example_netif_from_desc(const char *desc);
+esp_netif_t *get_netif_from_desc(const char *desc);
 
-#if CONFIG_EXAMPLE_PROVIDE_WIFI_CONSOLE_CMD
+#if CONFIG_PROVIDE_WIFI_CONSOLE_CMD
 /**
  * @brief Register wifi connect commands
  *
  * Provide a simple wifi_connect command in esp_console.
  * This function can be used after esp_console is initialized.
  */
-void example_register_wifi_connect_commands(void);
+void register_wifi_connect_commands(void);
 #endif
 
-#if CONFIG_EXAMPLE_CONNECT_ETHERNET
+#if CONFIG_CONNECT_ETHERNET
 /**
  * @brief Get the example Ethernet driver handle
  *
  * @return esp_eth_handle_t
  */
-esp_eth_handle_t get_example_eth_handle(void);
-#endif // CONFIG_EXAMPLE_CONNECT_ETHERNET
+esp_eth_handle_t get_eth_handle(void);
+#endif // CONFIG_CONNECT_ETHERNET
 
 #else
-static inline esp_err_t example_connect(void) {return ESP_OK;}
+static inline esp_err_t network_connect(void) {return ESP_OK;}
 #endif // !CONFIG_IDF_TARGET_LINUX
 
 #ifdef __cplusplus

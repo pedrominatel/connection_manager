@@ -7,13 +7,13 @@
    CONDITIONS OF ANY KIND, either express or implied.
  */
 
-#include "protocol_examples_common.h"
+#include "protocol_common.h"
 #include "esp_err.h"
 #include "esp_vfs_dev.h"
 #include "driver/uart.h"
 #include "sdkconfig.h"
 
-esp_err_t example_configure_stdin_stdout(void)
+esp_err_t configure_stdin_stdout(void)
 {
     static bool configured = false;
     if (configured) {
