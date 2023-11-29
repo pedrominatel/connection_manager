@@ -6,15 +6,15 @@
 
 
 #include <string.h>
-#include "protocol_examples_common.h"
-#include "example_common_private.h"
+#include "protocol_common.h"
+#include "common_private.h"
 #include "esp_wifi.h"
 #include "esp_log.h"
 #include "esp_console.h"
 #include "argtable3/argtable3.h"
 
 
-static const char *TAG = "example_console";
+static const char *TAG = "console";
 
 typedef struct {
     struct arg_str *ssid;
@@ -48,20 +48,20 @@ static int cmd_do_wifi_connect(int argc, char **argv)
     if (pass) {
         strlcpy((char *) wifi_config.sta.password, pass, sizeof(wifi_config.sta.password));
     }
-    example_wifi_sta_do_connect(wifi_config, false);
+    wifi_sta_do_connect(wifi_config, false);
     return 0;
 }
 
 static int cmd_do_wifi_disconnect(int argc, char **argv)
 {
-    example_wifi_sta_do_disconnect();
+    wifi_sta_do_disconnect();
     return 0;
 }
 
-void example_register_wifi_connect_commands(void)
+void register_wifi_connect_commands(void)
 {
     ESP_LOGI(TAG, "Registering WiFi connect commands.");
-    example_wifi_start();
+    wifi_start();
 
     connect_args.ssid = arg_str1(NULL, NULL, "<ssid>", "SSID of AP");
     connect_args.password = arg_str0(NULL, NULL, "<pass>", "password of AP");
